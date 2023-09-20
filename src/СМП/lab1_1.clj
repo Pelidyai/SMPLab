@@ -1,4 +1,4 @@
-(ns СМП.one_one)
+(ns СМП.lab1_1)
 (def global_symbols (list "a" "b" "c"))
 
 (defn add_symbol
