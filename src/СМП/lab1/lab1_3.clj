@@ -1,4 +1,4 @@
-(ns СМП.lab1_3)
+(ns СМП.lab1.lab1_3)
 
 (defn my-map
   [function roll]
