@@ -2,7 +2,7 @@
 
 (defn my-map
   [function roll]
-  (let [vector_roll (cons (vector (function (first roll))) (rest roll))]
+  (let [roll_with_first_vector (cons (vector (function (first roll))) (rest roll))]
     (reduce
       (fn
         [collected new_to_calc]
@@ -10,12 +10,43 @@
           collected
           (function new_to_calc)
           )
-        ) vector_roll
+        ) roll_with_first_vector
       )
     )
   )
 
 
+(defn apply-predicate
+  [predicate value]
+  (if (predicate value)
+    (vector value)
+    (vector)
+    )
+  )
+(defn my-filter
+  [predicate roll]
+  (let [roll_with_first_vector (cons
+                      (apply-predicate predicate (first roll))
+                      (rest roll))]
+    (reduce
+      (fn
+        [collected new_to_calc]
+        (concat
+          collected
+          (apply-predicate predicate new_to_calc)
+          )
+        ) roll_with_first_vector
+      )
+    )
+  )
+
+
+(println "core map:")
+(println (map (fn [value] (* 10 value)) '(1 2 3)))
+(println (map (fn [string] (concat "concated:" string)) '("a" "b" "c")))
+
+
+(println "my map:")
 (println (my-map (fn [value] (* 10 value)) '(1 2 3)))
 (println (my-map (fn [string] (concat "concated:" string)) '("a" "b" "c")))
 
@@ -32,3 +63,15 @@
 ;                   roll
 ;                   )
 ;                 ) (list (vector 1) 2 3) ))
+
+(println "core filter:")
+(println (filter (fn [value] (> 5 value)) '(1 10 2 20 3)))
+(println (filter (fn [string] (clojure.string/includes? string "a")) '("abc" "bcd" "cab")))
+
+
+(println "my filter:")
+(println (my-filter (fn [value] (> 5 value)) '(1 10 2 20 3)))
+(println (my-filter (fn [string] (clojure.string/includes? string "a")) '("abc" "bcd" "cab")))
+
+
+;(println (concat '[1 2 3] '(1)))
