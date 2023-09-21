@@ -7,7 +7,7 @@
    (add_symbol to_add symbols (list))
    )
   ([to_add symbols collector]
-   (if (<= (count symbols) 0)
+   (if (not (seq symbols))
      collector
      (if (= (first to_add) (first symbols))
        (recur to_add (rest symbols) collector)
@@ -22,7 +22,7 @@
    (add_for_all to_add_list symbols (list))
    )
   ([to_add_list, symbols, collector]
-   (if (<= (count to_add_list) 0)
+   (if (not (seq to_add_list))
      collector
      (let [new_collector (concat collector (add_symbol (first to_add_list) symbols))]
        (recur (rest to_add_list) symbols new_collector))

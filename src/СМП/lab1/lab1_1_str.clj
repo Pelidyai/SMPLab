@@ -3,7 +3,7 @@
 
 (defn add_symbol
   ([to_add symbols]
-   (if (> (count symbols) 0)
+   (if (seq symbols)
      (if (clojure.string/starts-with? (str (first to_add)) (first symbols))
        (add_symbol to_add (rest symbols))
        (cons (clojure.string/join (list (first symbols) (clojure.string/join to_add))) (add_symbol to_add (rest symbols))))
@@ -13,7 +13,7 @@
 
 (defn add_for_all
   [to_add_list, symbols]
-  (if (> (count to_add_list) 0)
+  (if (seq to_add_list)
     (concat (add_symbol (first to_add_list) symbols) (add_for_all (rest to_add_list) symbols))
     )
   )

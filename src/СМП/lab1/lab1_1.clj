@@ -1,9 +1,9 @@
 (ns СМП.lab1.lab1_1)
-(def global_symbols (list "a" "b" "c"))
+(def global_symbols (vector "a" "b" "c"))
 
 (defn add_symbol
   ([to_add symbols]
-   (if (> (count symbols) 0)
+   (if (seq symbols)
      (if (= (first to_add) (first symbols))
        (add_symbol to_add (rest symbols))
        (cons (cons (first symbols) to_add) (add_symbol to_add (rest symbols))))
@@ -13,7 +13,7 @@
 
 (defn add_for_all
   [to_add_list, symbols]
-  (if (> (count to_add_list) 0)
+  (if (seq to_add_list)
     (concat (add_symbol (first to_add_list) symbols) (add_for_all (rest to_add_list) symbols))
     )
   )
