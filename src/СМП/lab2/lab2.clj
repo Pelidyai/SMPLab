@@ -3,11 +3,6 @@
 
 (def step 0.05)
 
-
-(defn target_func
-  [x]
-  (/ (* x x) 2)
-  )
 (defn get_steps
   [up_to]
   (for [x (range (/ up_to step))] (* x step))
@@ -18,7 +13,7 @@
   (* (/ (+ (func current) (func next)) 2) (- next current))
   )
 
-(defn func
+(defn integral
   [operator]
   #(reduce
      (fn [collected current] (+ collected current))
@@ -32,19 +27,6 @@
        )
      )
   )
-
-(def integrated (func #(target_func %)))
-(println
-  (integrated 50)
-  )
-(println
-  (integrated 40)
-  )
-(println
-  (integrated 30)
-  )
-
-
 
 ;(def v #(get_steps %))
 ;(println (v 1))
