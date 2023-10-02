@@ -1,14 +1,14 @@
-(ns СМП.lab2.lab2)
-; NON-MEM
+(ns СМП.lab2.lab2_mem1)
+; WRAP + PARTIAL
 
-(def step 1)
+(def global_step 1)
 
 (defn trap
-  ([func current]
-   (trap func current (+ current step))
+  ([operator current]
+   (trap operator current (+ current global_step))
    )
-  ([func current next]
-   (* (/ (+ (func current) (func next)) 2) (- next current)))
+  ([operator current next]
+   (* (/ (+ (operator current) (operator next)) 2) (- next current)))
   )
 
 (defn trap_parts_sum
@@ -16,26 +16,29 @@
    (trap_parts_sum operator up_to 0 0)
    )
   ([operator up_to accumulator current]
-   (if (>= current (- up_to step))
+   (if (>= current (- up_to global_step))
      (+ accumulator (trap operator current))
-     (recur operator up_to (+ accumulator (trap operator current)) (+ current step))
+     (recur operator up_to (+ accumulator (trap operator current)) (+ current global_step))
      )
    )
   )
 
-(defn integral
-  [operator]
-  (fn [x] (trap_parts_sum operator x))
+(defn integral_mem
+  ([operator]
+   (let [wrapped (memoize (partial trap_parts_sum operator))]
+     (fn [x] (wrapped x))
+     )
+   )
   )
-
 
 (defn target_func
   [x]
   (/ (* x x) 2)
   )
+
 (defn ex
   []
-  (let [integrated (integral target_func)]
+  (let [integrated (integral_mem target_func)]
     (time (integrated 40))
     (time (integrated 55))
     (time (integrated 60))
@@ -48,7 +51,7 @@
 
 
 (ex)
-(def integrated (integral target_func))
+(def integrated (integral_mem target_func))
 (println "second")
 (println (integrated 50))
 (time (integrated 41))
@@ -58,5 +61,3 @@
 (time (integrated 71))
 (time (integrated 76))
 (time (integrated 81))
-
-
