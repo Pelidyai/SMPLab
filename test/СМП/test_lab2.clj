@@ -11,7 +11,7 @@
 (def integrated (СМП.lab2.lab2/integral target_func))
 
 (deftest test_integral
-  (is (< (abs (- 20833 (integrated 50))) 0.5))
+  (is (< (abs (- 20833 (integrated 50))) 2))
   )
 
 

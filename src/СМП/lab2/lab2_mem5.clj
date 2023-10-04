@@ -1,6 +1,5 @@
-(ns СМП.lab2.lab2_mem3)
-
-; WRAP MEM
+(ns СМП.lab2.lab2_mem5)
+; FIX MEM
 
 (def global_step 0.5)
 
@@ -12,20 +11,20 @@
    (* (/ (+ (operator current) (operator next)) 2) (- next current)))
   )
 
-(defn trap_parts_sum
-  ([to_call operator up_to accumulator current]
-   (if (>= current (- up_to global_step))
-     (+ accumulator (trap operator current))
-     (to_call to_call operator up_to (+ accumulator (trap operator current)) (+ current global_step))
-     )
-   )
+(def trap_parts_sum_mem
+  (memoize
+    (fn
+      [operator up_to accumulator current]
+      (if (>= current (- up_to global_step))
+        (+ accumulator (trap operator current))
+        (trap_parts_sum_mem operator up_to (+ accumulator (trap operator current)) (+ current global_step))
+        )
+      )
+    )
   )
-
 (defn integral_mem
   ([operator]
-   (let [wrapped (memoize trap_parts_sum)]
-     (fn [x] (wrapped wrapped operator x 0 0))
-     )
+   (fn [x] (trap_parts_sum_mem operator x 0 0))
    )
   )
 

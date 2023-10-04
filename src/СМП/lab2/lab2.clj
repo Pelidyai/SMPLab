@@ -1,7 +1,7 @@
 (ns СМП.lab2.lab2)
 ; NON-MEM
 
-(def step 1)
+(def step 0.5)
 
 (defn trap
   ([func current]
