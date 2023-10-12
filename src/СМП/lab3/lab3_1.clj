@@ -50,34 +50,34 @@
 
 (def collection
   (->> (iterate inc 0)
-       (take 100000)
+       (take 1000000)
        )
   )
 
 (defn parallel-filter
-  [predicate roll step]
+  [predicate step roll]
   (->> roll
        (split-to-batches step)
-       (map #(future (my-filter predicate %)))
+       (map #(future (doall (filter predicate %))))
        (doall)
        (map deref)
        (flatten)
        )
   )
 
-(println "lib filter:")
-(time (filter hard-predicate collection))
-
-(println "\nparallel filter (step - 5):")
-(println (time (parallel-filter hard-predicate collection 5)))
-
-(println "\nparallel filter (step - 20):")
-(println (time (parallel-filter hard-predicate collection 20)))
-
-(println "\nparallel filter (step - 2):")
-(println (time (parallel-filter hard-predicate collection 2)))
-
-(println "\nnon-parallel filter:")
-(time (my-filter hard-predicate collection))
+;(println "lib filter:")
+;(time (filter hard-predicate collection))
+;
+;(println "\nparallel filter (step - 5):")
+;(println (time (parallel-filter hard-predicate collection 5)))
+;
+;(println "\nparallel filter (step - 20):")
+;(println (time (parallel-filter hard-predicate collection 20)))
+;
+;(println "\nparallel filter (step - 2):")
+;(println (time (parallel-filter hard-predicate collection 2)))
+;
+;(println "\nnon-parallel filter:")
+;(time (my-filter hard-predicate collection))
 
 
